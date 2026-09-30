@@ -2,7 +2,8 @@ import type { ExpertisePage } from "@/lib/site-content";
 import { extraExpertises } from "@/lib/extra-expertises";
 import { serviceImages } from "@/lib/service-images";
 
-const heroLeak = serviceImages.fuite.src;
+const heroLeak = serviceImages.plombierIntervention.src;
+const heroLeakAlt = serviceImages.plombierIntervention.alt;
 const heroDebouch = serviceImages.camion.src;
 const heroCamera = serviceImages.inspectionCamera.src;
 const heroCanal = serviceImages.assainissement.src;
@@ -19,7 +20,7 @@ export const defaultExpertises: ExpertisePage[] = [
     description:
       "Nous traçons l’origine exacte de votre fuite avec gaz traceur, écoute acoustique, ultrasons et caméra thermique. Pas de démolition à l’aveugle : vous savez où intervenir avant de casser.",
     heroImage: heroLeak,
-    heroImageAlt: serviceImages.fuite.alt,
+    heroImageAlt: heroLeakAlt,
     highlights: [
       "Gaz traceur & ultrasons",
       "Caméra thermique",

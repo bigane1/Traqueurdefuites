@@ -30,14 +30,47 @@ export const extraExpertises: ExpertisePage[] = [
   base({
     slug: "infiltration-fumigene",
     shortTitle: "Infiltration par fumigène",
-    badge: "Toiture & étanchéité",
-    title: "Détection d'infiltration par fumigène",
-    subtitle: "Toit-terrasse, membrane — test visuel non destructif",
+    badge: "Toiture, EU & étanchéité",
+    title: "Détection d'infiltration et test d'étanchéité par fumigène",
+    subtitle: "Toit-terrasse, membranes — branchements eaux usées (EU) et eaux vannes (EV)",
     description:
-      "En cas de doute sur l'étanchéité d'un toit-terrasse ou d'une membrane, nous injectons de la fumée pour repérer les points faibles. Méthode efficace, non destructive et visuelle.",
-    heroImage: serviceImages.fumigene.src,
-    heroImageAlt: serviceImages.fumigene.alt,
-    highlights: ["Visuel", "Non destructif", "Toiture", "Rapport"],
+      "Le fumigène permet de visualiser les défauts d'étanchéité sans démolition : infiltration sur toiture ou contrôle des raccordements EU/EV. Fumée non toxique injectée dans le réseau ou sous membrane — là où elle ressort, nous identifions la fuite ou le mauvais raccord.",
+    heroImage: serviceImages.fumigeneEu.src,
+    heroImageAlt: serviceImages.fumigeneEu.alt,
+    highlights: ["Visuel", "Non destructif", "Toiture & EU", "Rapport"],
+    spotlights: [
+      {
+        title: "Toit-terrasse & membranes",
+        subtitle: "Infiltration visible sans casser",
+        body:
+          "En cas de doute sur l'étanchéité d'un toit-terrasse, d'une terrasse ou d'une membrane, nous générons de la fumée sous la couverture ou dans le volume concerné. Les sorties de fumée révulent joints défectueux, points singuliers ou reprises mal étanches — repérage précis pour votre couvreur ou votre assurance.",
+        image: serviceImages.fumigene.src,
+        imageAlt: serviceImages.fumigene.alt,
+        imageLeft: true,
+      },
+      {
+        title: "Test d'étanchéité des branchements eaux usées (EU)",
+        subtitle: "Contrôle fumigène des raccordements et réseaux privés",
+        body:
+          "Nous injectons une fumée non toxique dans vos canalisations (EU, et EV si besoin). Là où la fumée ressort — regard de rue, bouche d'égout, vide sanitaire, mauvais raccord — nous localisons le défaut d'étanchéité sans ouvrir les sols inutilement. Méthode reconnue pour la réception de travaux ou les doutes sur un branchement.",
+        image: serviceImages.fumigeneEu.src,
+        imageAlt: serviceImages.fumigeneEu.alt,
+      },
+    ],
+    faqs: [
+      {
+        q: "Intervenez-vous pour les professionnels ?",
+        a: "Oui : particuliers, syndics, agences immobilières et collectivités.",
+      },
+      {
+        q: "Fumigène sur toiture ou sur branchement EU : c'est la même prestation ?",
+        a: "Le principe est le même (fumée non toxique pour visualiser les défauts), mais le matériel et le protocole diffèrent. Nous adaptons l'intervention : membrane / toit-terrasse d'un côté, réseau EU–EV et raccordements de l'autre.",
+      },
+      {
+        q: "La fumée est-elle dangereuse ?",
+        a: "Non : nous utilisons une fumée de test non toxique, adaptée au contrôle d'étanchéité en milieu habité ou sur réseau.",
+      },
+    ],
   }),
   base({
     slug: "plomberie-urgence",

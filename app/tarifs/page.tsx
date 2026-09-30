@@ -13,8 +13,8 @@ export const metadata = {
   description: "Prix indicatifs — recherche de fuite, débouchage, inspection vidéo. Devis gratuit.",
 };
 
-export default function TarifsPage() {
-  const { tarifs, tarifsSection } = getSiteContent();
+export default async function TarifsPage() {
+  const { tarifs, tarifsSection } = await getSiteContent();
 
   return (
     <>

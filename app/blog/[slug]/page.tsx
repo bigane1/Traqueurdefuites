@@ -9,19 +9,22 @@ import type { Metadata } from "next";
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return getSiteContent().blog.map((p) => ({ slug: p.slug }));
+  const content = await getSiteContent();
+  return content.blog.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getSiteContent().blog.find((p) => p.slug === slug);
+  const content = await getSiteContent();
+  const post = content.blog.find((p) => p.slug === slug);
   if (!post) return {};
   return { title: post.title, description: post.excerpt };
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = getSiteContent().blog.find((p) => p.slug === slug);
+  const content = await getSiteContent();
+  const post = content.blog.find((p) => p.slug === slug);
   if (!post) notFound();
 
   return (

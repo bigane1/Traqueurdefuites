@@ -5,6 +5,7 @@ import HeroUltra from "@/components/ultra/HeroUltra";
 import MarqueeUltra from "@/components/ultra/MarqueeUltra";
 import UrgenceUltra from "@/components/ultra/UrgenceUltra";
 import ServicesUltra from "@/components/ultra/ServicesUltra";
+import ClientFocusBlocks from "@/components/ClientFocusBlocks";
 import ProcessUltra from "@/components/ultra/ProcessUltra";
 import TarifsUltra from "@/components/ultra/TarifsUltra";
 import ValuesUltra from "@/components/ultra/ValuesUltra";
@@ -17,8 +18,8 @@ import { faqSchema } from "@/lib/schema";
 
 export const dynamic = "force-dynamic";
 
-export default function HomePage() {
-  const content = getSiteContent();
+export default async function HomePage() {
+  const content = await getSiteContent();
 
   return (
     <>
@@ -32,6 +33,7 @@ export default function HomePage() {
         <MarqueeUltra />
         <UrgenceUltra />
         <ServicesUltra items={content.expertises} />
+        <ClientFocusBlocks blocks={content.clientFocusBlocks} />
         <ProcessUltra />
         <TarifsUltra />
         <ValuesUltra />

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { getSiteContent } from "@/lib/site-content";
 
-export default function ProTarifsBand() {
-  const { tarifs, tarifsSection } = getSiteContent();
+export default async function ProTarifsBand() {
+  const { tarifs, tarifsSection } = await getSiteContent();
 
   return (
     <section id="tarifs" className="py-20 px-4 border-t border-[var(--pro-line)]">

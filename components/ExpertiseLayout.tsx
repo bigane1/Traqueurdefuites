@@ -52,6 +52,31 @@ export default function ExpertiseLayout({
           </div>
         </section>
 
+        {page.spotlights?.map((spot) => (
+          <section
+            key={spot.title}
+            className="py-16 px-4 border-t border-slate-100 bg-surface"
+          >
+            <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
+              <div
+                className={`rounded-2xl overflow-hidden aspect-[4/3] ring-1 ring-slate-200 shadow-lg ${
+                  spot.imageLeft ? "lg:order-1" : "lg:order-2"
+                }`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={spot.image} alt={spot.imageAlt} className="w-full h-full object-cover" />
+              </div>
+              <div className={spot.imageLeft ? "lg:order-2" : "lg:order-1"}>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">{spot.title}</h2>
+                {spot.subtitle ? (
+                  <p className="text-blue-700 font-semibold text-sm mb-4">{spot.subtitle}</p>
+                ) : null}
+                <p className="text-slate-600 leading-relaxed text-sm sm:text-base">{spot.body}</p>
+              </div>
+            </div>
+          </section>
+        ))}
+
         <section className="max-w-7xl mx-auto px-4 py-16 grid sm:grid-cols-2 gap-6">
           {page.benefits.map((b) => (
             <div key={b.title} className="p-6 rounded-2xl bg-surface border border-slate-200 hover:shadow-md transition">

@@ -29,8 +29,8 @@ export const metadata: Metadata = {
     siteName: "Traqueur de Fuites",
   },
   icons: {
-    icon: "/brand/logo-site.png",
-    apple: "/brand/logo-site.png",
+    icon: "/brand/logo-blanc.png",
+    apple: "/brand/logo-blanc.png",
   },
   robots: { index: true, follow: true },
 };

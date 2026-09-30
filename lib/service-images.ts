@@ -42,6 +42,21 @@ export const serviceImages = {
     src: pex(39238311),
     alt: "Toit-terrasse — recherche d'infiltration par fumigène, test non destructif",
   },
+  /** Fumée au regard / canalisation EU — test d'étanchéité (photo réelle type assainissement) */
+  fumigeneEu: {
+    src: "/images/fumigene-fumee-regard.jpg",
+    alt: "Fumée non toxique sortant d'un regard de canalisation EU — test d'étanchéité des branchements",
+  },
+  /** Plombier — portrait pro (public/images/plombier.jpg) */
+  technicienConfiance: {
+    src: "/images/plombier.jpg",
+    alt: "Plombier professionnel en combinaison — intervention plomberie",
+  },
+  /** Plombier en diagnostic sous évier / canalisation */
+  plombierIntervention: {
+    src: "/images/plombier-intervention.jpg",
+    alt: "Plombier au travail — inspection des canalisations sous évier",
+  },
   chemisage: {
     src: pex(5691622),
     alt: "Réhabilitation de canalisation",
@@ -62,11 +77,13 @@ export const serviceImages = {
 
 export function tarifImage(title: string): string {
   const t = title.toLowerCase();
-  if (t.includes("recherche") || t.includes("fuite")) return serviceImages.fuite.src;
+  if (t.includes("recherche") || t.includes("fuite")) return serviceImages.technicienConfiance.src;
   if (t.includes("débouchage") || t.includes("debouchage")) return serviceImages.debouchage.src;
   if (t.includes("curage")) return serviceImages.camion.src;
   if (t.includes("inspection") || t.includes("caméra") || t.includes("camera"))
     return serviceImages.inspectionCamera.src;
+  if (t.includes("eaux usées") || t.includes("eaux usees") || t.includes("branchement"))
+    return serviceImages.fumigeneEu.src;
   if (t.includes("fumigène") || t.includes("fumigene")) return serviceImages.fumigene.src;
   if (t.includes("infiltration")) return serviceImages.fumigene.src;
   if (t.includes("désembouage") || t.includes("desembouage") || t.includes("chauffage"))

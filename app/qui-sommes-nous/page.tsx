@@ -13,8 +13,8 @@ export const metadata = {
     "Traqueur de Fuites — artisans engagés, détection de fuites sans destruction, 8 départements.",
 };
 
-export default function QuiSommesNousPage() {
-  const { aboutTitle, aboutParagraphs } = getSiteContent();
+export default async function QuiSommesNousPage() {
+  const { aboutTitle, aboutParagraphs } = await getSiteContent();
 
   return (
     <>

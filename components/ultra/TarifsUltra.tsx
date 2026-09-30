@@ -2,8 +2,8 @@ import Link from "next/link";
 import { getSiteContent } from "@/lib/site-content";
 import TarifsGrid from "@/components/TarifsGrid";
 
-export default function TarifsUltra() {
-  const { tarifs, tarifsSection } = getSiteContent();
+export default async function TarifsUltra() {
+  const { tarifs, tarifsSection } = await getSiteContent();
 
   return (
     <section id="tarifs" className="py-24 px-4 bg-white">

@@ -2,8 +2,8 @@ import Link from "next/link";
 import { getSiteContent } from "@/lib/site-content";
 import TarifsGrid from "@/components/TarifsGrid";
 
-export default function TarifsTeaser() {
-  const { tarifs, tarifsSection } = getSiteContent();
+export default async function TarifsTeaser() {
+  const { tarifs, tarifsSection } = await getSiteContent();
   const preview = tarifs.slice(0, 3);
 
   return (

@@ -1,7 +1,16 @@
-import fs from "fs";
-import path from "path";
 import { defaultExpertises } from "@/lib/expertise-defaults";
+import { loadStoredContent, persistSiteContent } from "@/lib/content-persistence";
 import { serviceImages, tarifImage } from "@/lib/service-images";
+
+export type ExpertiseSpotlight = {
+  title: string;
+  subtitle?: string;
+  body: string;
+  image: string;
+  imageAlt: string;
+  /** Image à gauche du texte (défaut : droite) */
+  imageLeft?: boolean;
+};
 
 export type ExpertisePage = {
   slug: string;
@@ -15,6 +24,7 @@ export type ExpertisePage = {
   heroImage: string;
   heroImageAlt: string;
   highlights: string[];
+  spotlights?: ExpertiseSpotlight[];
   benefits: { icon: string; title: string; text: string }[];
   phases: { label: string; title: string; text: string }[];
   faqs: { q: string; a: string }[];
@@ -37,11 +47,41 @@ export type TarifItem = {
   image?: string;
 };
 
+export type LegalPageContent = {
+  title: string;
+  intro: string;
+  sections: { heading: string; body: string }[];
+};
+
+export type MutualisationContent = {
+  heroTitle: string;
+  heroHighlight: string;
+  intro: string;
+  callout: string;
+  benefits: string[];
+  ctaText: string;
+};
+
+export type ClientFocusBlock = {
+  badge: string;
+  title: string;
+  body: string;
+  image: string;
+  imageAlt: string;
+  href: string;
+  ctaLabel: string;
+  imageLeft?: boolean;
+  /** contain = tête entière visible (portraits) */
+  imageFit?: "cover" | "contain";
+};
+
 export type SiteContent = {
   phone: string;
   phoneDisplay: string;
   email: string;
   address: string;
+  logoSrc: string;
+  logoAlt: string;
   heroEyebrow: string;
   heroTitle: string;
   heroLead: string;
@@ -57,9 +97,73 @@ export type SiteContent = {
   faq: { q: string; a: string }[];
   tarifs: TarifItem[];
   tarifsSection: { badge: string; title: string; subtitle: string };
+  clientFocusBlocks: ClientFocusBlock[];
+  mutualisation: MutualisationContent;
+  legal: {
+    mentions: LegalPageContent;
+    cgu: LegalPageContent;
+    cgv: LegalPageContent;
+  };
 };
 
-const CONTENT_FILE = path.join(process.cwd(), "data", "site-content.json");
+const defaultMutualisation: MutualisationContent = {
+  heroTitle: "Voisins, ensemble",
+  heroHighlight: "on se mutualise !",
+  intro:
+    "Regroupons-nous entre voisins de quartier pour un curage préventif de vos canalisations.",
+  callout: "Prix de groupe = économies garanties !",
+  benefits: [
+    "Moins de risques de bouchons",
+    "Des canalisations plus durables",
+    "Un tarif avantageux pour tous",
+  ],
+  ctaText: "Contactez-nous pour organiser une session de curage groupé dans votre quartier.",
+};
+
+const defaultLegalMentions: LegalPageContent = {
+  title: "Mentions légales",
+  intro: "Informations légales relatives au site Traqueur de Fuites.",
+  sections: [
+    {
+      heading: "Éditeur du site",
+      body: "Traqueur de Fuites — 34 rue de la Morinerie, 37700 Saint-Pierre-des-Corps. Tél. 06 25 90 32 50 — contact@traqueurdefuites.fr. Raison sociale, SIRET et directeur de publication à compléter.",
+    },
+    {
+      heading: "Hébergement",
+      body: "Hébergeur et coordonnées à compléter selon le serveur de déploiement (ex. Vercel Inc.).",
+    },
+  ],
+};
+
+const defaultLegalCgu: LegalPageContent = {
+  title: "Conditions générales d'utilisation",
+  intro: "Les présentes CGU régissent l'utilisation du site traqueurdefuites.fr.",
+  sections: [
+    {
+      heading: "Objet",
+      body: "Le site informe sur les prestations de plomberie, recherche de fuite et débouchage. Les informations sont indicatives et ne remplacent pas un devis signé.",
+    },
+    {
+      heading: "Responsabilité",
+      body: "L'éditeur s'efforce d'assurer l'exactitude des contenus. Toutefois, il ne saurait être tenu responsable des erreurs ou indisponibilités temporaires.",
+    },
+  ],
+};
+
+const defaultLegalCgv: LegalPageContent = {
+  title: "Conditions générales de vente",
+  intro: "Les CGV s'appliquent aux prestations réalisées par Traqueur de Fuites.",
+  sections: [
+    {
+      heading: "Devis et commande",
+      body: "Toute intervention fait l'objet d'un devis ou d'un bon d'intervention accepté avant travaux, sauf urgence explicitement convenue.",
+    },
+    {
+      heading: "Tarifs et paiement",
+      body: "Les tarifs affichés sur le site sont indicatifs. Le prix définitif est confirmé sur place. Modalités de paiement précisées sur le devis.",
+    },
+  ],
+};
 
 const seedBlog: BlogPost[] = [
   {
@@ -114,6 +218,8 @@ export const defaultSiteContent: SiteContent = {
   phoneDisplay: "06 25 90 32 50",
   email: "contact@traqueurdefuites.fr",
   address: "34 rue de la Morinerie, 37700 Saint-Pierre-des-Corps",
+  logoSrc: "/brand/logo-blanc.png",
+  logoAlt: "Traqueur de Fuites — Plomberie Services",
   heroEyebrow: "10 ans d'expérience · Devis en urgence · 24h/24",
   heroTitle: "Fuite ou canalisation bouchée ? Intervention rapide 7j/7",
   heroLead:
@@ -203,12 +309,37 @@ export const defaultSiteContent: SiteContent = {
     subtitle:
       "Les tarifs ci-dessous sont indicatifs. Le prix exact est confirmé après diagnostic sur place — devis gratuit.",
   },
+  clientFocusBlocks: [
+    {
+      badge: "Contrôle d'étanchéité EU",
+      title: "Test fumigène — branchements eaux usées (EU)",
+      body:
+        "Nous injectons une fumée non toxique dans votre réseau d'eaux usées (EU) ou eaux vannes (EV). Là où la fumée ressort — regard, mauvais raccord, vide sanitaire, ventilation — le défaut d'étanchéité est identifié sans ouvrir inutilement. Idéal en cas de doute sur un branchement, d'odeurs ou avant réception de travaux.",
+      image: serviceImages.fumigeneEu.src,
+      imageAlt: serviceImages.fumigeneEu.alt,
+      href: "/expertises/infiltration-fumigene",
+      ctaLabel: "Fumigène toiture & EU",
+      imageLeft: true,
+    },
+    {
+      badge: "Recherche de fuite",
+      title: "Recherche de fuite non destructive",
+      body:
+        "Gaz traceur, écoute acoustique, ultrasons et caméra thermique : nous localisons la fuite sans casser murs ou sols. Véhicule atelier, devis annoncé avant travaux, rapport utilisable pour votre assurance.",
+      image: serviceImages.technicienConfiance.src,
+      imageAlt: serviceImages.technicienConfiance.alt,
+      href: "/expertises/recherche-fuite",
+      ctaLabel: "Recherche de fuite",
+      imageLeft: false,
+      imageFit: "cover",
+    },
+  ],
   tarifs: [
     {
       title: "Recherche de fuite non destructive",
       price: "Sur devis",
       desc: "Tarif selon complexité (gaz traceur, thermique, acoustique). Rapport pour assurance.",
-      image: serviceImages.fuite.src,
+      image: serviceImages.technicienConfiance.src,
     },
     {
       title: "Débouchage WC / évier",
@@ -231,8 +362,14 @@ export const defaultSiteContent: SiteContent = {
     {
       title: "Détection infiltration fumigène",
       price: "Sur devis",
-      desc: "Test d'étanchéité toiture ou membrane — méthode visuelle.",
-      image: serviceImages.fumigene.src,
+      desc: "Toiture, membrane ou branchements EU/EV — fumée non toxique, repérage visuel.",
+      image: serviceImages.fumigeneEu.src,
+    },
+    {
+      title: "Test fumigène branchements EU",
+      price: "Sur devis",
+      desc: "Contrôle d'étanchéité des raccordements eaux usées — la fumée sort là où le réseau n'est pas étanche.",
+      image: serviceImages.fumigeneEu.src,
     },
     {
       title: "Désembouage chauffage",
@@ -241,13 +378,42 @@ export const defaultSiteContent: SiteContent = {
       image: serviceImages.desembouage.src,
     },
   ],
+  mutualisation: defaultMutualisation,
+  legal: {
+    mentions: defaultLegalMentions,
+    cgu: defaultLegalCgu,
+    cgv: defaultLegalCgv,
+  },
 };
+
+function mergeExpertises(stored: ExpertisePage[] | undefined): ExpertisePage[] {
+  const defaults = defaultSiteContent.expertises;
+  if (!stored?.length) return defaults;
+  return defaults.map((def) => {
+    const over = stored.find((s) => s.slug === def.slug);
+    if (!over) return def;
+    return {
+      ...def,
+      ...over,
+      benefits: over.benefits?.length ? over.benefits : def.benefits,
+      phases: over.phases?.length ? over.phases : def.phases,
+      faqs: over.faqs?.length ? over.faqs : def.faqs,
+      highlights: over.highlights?.length ? over.highlights : def.highlights,
+      spotlights: over.spotlights?.length ? over.spotlights : def.spotlights,
+    };
+  });
+}
 
 export function mergeSiteContent(raw: Partial<SiteContent>): SiteContent {
   return {
     ...defaultSiteContent,
     ...raw,
-    expertises: raw.expertises?.length ? raw.expertises : defaultSiteContent.expertises,
+    expertises: mergeExpertises(raw.expertises),
+    clientFocusBlocks: defaultSiteContent.clientFocusBlocks.map((def) => {
+      const over = raw.clientFocusBlocks?.find((b) => b.href === def.href);
+      if (!over) return def;
+      return { ...def, ...over, imageFit: over.imageFit ?? def.imageFit };
+    }),
     blog: raw.blog ?? defaultSiteContent.blog,
     stats: raw.stats?.length ? raw.stats : defaultSiteContent.stats,
     zoneGroups: raw.zoneGroups?.length ? raw.zoneGroups : defaultSiteContent.zoneGroups,
@@ -265,26 +431,46 @@ export function mergeSiteContent(raw: Partial<SiteContent>): SiteContent {
         }))
       : defaultSiteContent.tarifs,
     tarifsSection: { ...defaultSiteContent.tarifsSection, ...raw.tarifsSection },
+    mutualisation: { ...defaultSiteContent.mutualisation, ...raw.mutualisation },
+    legal: {
+      mentions: {
+        ...defaultSiteContent.legal.mentions,
+        ...raw.legal?.mentions,
+        sections: raw.legal?.mentions?.sections?.length
+          ? raw.legal.mentions.sections
+          : defaultSiteContent.legal.mentions.sections,
+      },
+      cgu: {
+        ...defaultSiteContent.legal.cgu,
+        ...raw.legal?.cgu,
+        sections: raw.legal?.cgu?.sections?.length
+          ? raw.legal.cgu.sections
+          : defaultSiteContent.legal.cgu.sections,
+      },
+      cgv: {
+        ...defaultSiteContent.legal.cgv,
+        ...raw.legal?.cgv,
+        sections: raw.legal?.cgv?.sections?.length
+          ? raw.legal.cgv.sections
+          : defaultSiteContent.legal.cgv.sections,
+      },
+    },
+    logoSrc: raw.logoSrc || defaultSiteContent.logoSrc,
+    logoAlt: raw.logoAlt || defaultSiteContent.logoAlt,
   };
 }
 
-export function getSiteContent(): SiteContent {
-  try {
-    if (fs.existsSync(CONTENT_FILE)) {
-      const raw = JSON.parse(fs.readFileSync(CONTENT_FILE, "utf8")) as Partial<SiteContent>;
-      return mergeSiteContent(raw);
-    }
-  } catch {
-    /* defaults */
-  }
+export async function getSiteContent(): Promise<SiteContent> {
+  const raw = await loadStoredContent();
+  if (raw) return mergeSiteContent(raw);
   return defaultSiteContent;
 }
 
-export function saveSiteContent(content: SiteContent) {
-  fs.mkdirSync(path.dirname(CONTENT_FILE), { recursive: true });
-  fs.writeFileSync(CONTENT_FILE, JSON.stringify(content, null, 2), "utf8");
+export async function saveSiteContent(content: SiteContent) {
+  await persistSiteContent(content);
 }
 
-export function getExpertiseBySlug(slug: string): ExpertisePage | undefined {
-  return getSiteContent().expertises.find((e) => e.slug === slug);
+export async function getExpertiseBySlug(slug: string): Promise<ExpertisePage | undefined> {
+  const content = await getSiteContent();
+  return content.expertises.find((e) => e.slug === slug);
 }

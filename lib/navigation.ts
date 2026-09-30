@@ -4,6 +4,7 @@ export const MAIN_NAV = [
   { href: "/", label: "Accueil" },
   { href: "/qui-sommes-nous", label: "Qui sommes-nous" },
   { href: "/tarifs", label: "Tarifs" },
+  { href: "/mutualisation", label: "Curage groupé" },
   { href: "/blog", label: "Blog" },
   { href: "/demande-intervention", label: "Devis" },
   { href: "/#contact", label: "Contact" },
@@ -27,7 +28,7 @@ export const SERVICE_NAV = [
   },
   {
     slug: "infiltration-fumigene",
-    label: "Détection d'infiltration par fumigène",
+    label: "Fumigène — toiture & branchements EU",
     icon: "💨",
   },
   {

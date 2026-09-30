@@ -8,6 +8,17 @@
   --accent-hot: #ff4757;
   --surface: #f4f6f8;
   --glow-cyan: rgb(34 211 238 / 0.45);
+  --site-header-height: 9.5rem;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --site-header-height: 10rem;
+  }
+}
+
+.pt-mutualisation-header {
+  padding-top: var(--site-header-height);
 }
 
 @theme inline {

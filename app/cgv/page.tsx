@@ -7,17 +7,17 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const content = await getSiteContent();
-  return { title: content.legal.mentions.title };
+  return { title: content.legal.cgv.title };
 }
 
-export default async function MentionsPage() {
+export default async function CgvPage() {
   const content = await getSiteContent();
 
   return (
     <>
       <SiteHeader />
       <main className="pt-16 max-w-3xl mx-auto px-4 py-16">
-        <LegalDocument doc={content.legal.mentions} />
+        <LegalDocument doc={content.legal.cgv} />
       </main>
       <SiteFooter />
     </>

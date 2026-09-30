@@ -9,8 +9,8 @@ export const metadata = { title: "Blog" };
 
 const categoryLabel = { conseils: "Conseils", interventions: "Interventions", regional: "Régional" };
 
-export default function BlogIndexPage() {
-  const posts = [...getSiteContent().blog].sort((a, b) => b.date.localeCompare(a.date));
+export default async function BlogIndexPage() {
+  const posts = [...(await getSiteContent()).blog].sort((a, b) => b.date.localeCompare(a.date));
 
   return (
     <>
