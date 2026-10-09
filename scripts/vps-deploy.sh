@@ -56,7 +56,26 @@ if [ -z "${DATABASE_URL:-}" ] && ! grep -q '^DATABASE_URL=.' "$ROOT/.env" 2>/dev
 fi
 
 echo "=== Build Next.js ==="
-npm ci --include=dev
+export NPM_CONFIG_FETCH_RETRIES=5
+export NPM_CONFIG_FETCH_RETRY_MINTIMEOUT=20000
+export NPM_CONFIG_FETCH_RETRY_MAXTIMEOUT=120000
+
+npm_ok=false
+for attempt in 1 2 3 4 5; do
+  echo "=== npm ci (tentative $attempt/5) ==="
+  if npm ci --include=dev; then
+    npm_ok=true
+    break
+  fi
+  echo "npm ci interrompu (réseau). Nouvel essai dans 20s."
+  sleep 20
+done
+
+if [ "$npm_ok" != true ]; then
+  echo "npm ci a échoué après 5 tentatives."
+  exit 1
+fi
+
 npm run build
 
 if [ "$PLACEHOLDER" = 1 ]; then
