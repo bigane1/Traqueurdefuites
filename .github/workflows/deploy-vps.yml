@@ -1,0 +1,87 @@
+# Déploiement VPS isolé (dossier /var/www/traqueurdefuite, PM2 port 3004).
+# Ne redémarre pas yogaops (3000), qadus (3002) ni rapidea (3003).
+#
+# Secrets (les mêmes que Qadus / YogaOps) :
+#   VPS_SSH_PRIVATE_KEY
+#   VPS_SSH_PASSWORD      (si pas de clé)
+#   VPS_HOST              (51.91.253.165)
+#   VPS_USER              (ubuntu)
+#
+# Le domaine public pointe encore chez LWS : ce workflow ne change pas le DNS
+# et ne fait pas échouer le déploiement si https://traqueurdefuites.fr sert encore WordPress.
+
+name: CI & déploiement VPS — Traqueur de fuites
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vps-traqueurdefuite-production
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+        env:
+          DATABASE_URL: postgresql://127.0.0.1:5432/traqueur_build_placeholder
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build Next.js
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+          DATABASE_URL: postgresql://127.0.0.1:5432/traqueur_build_placeholder
+
+  deploy:
+    needs: ci
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vérifier auth SSH
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          SSH_PASS: ${{ secrets.VPS_SSH_PASSWORD }}
+        run: |
+          if [ -z "${SSH_KEY:-}" ] && [ -z "${SSH_PASS:-}" ]; then
+            echo "::error::Ajoutez VPS_SSH_PRIVATE_KEY ou VPS_SSH_PASSWORD (recopier depuis le dépôt Qadus)."
+            exit 1
+          fi
+
+      - name: Déployer sur le VPS
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.VPS_HOST || '51.91.253.165' }}
+          username: ${{ secrets.VPS_USER || 'ubuntu' }}
+          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          password: ${{ secrets.VPS_SSH_PASSWORD }}
+          port: 22
+          command_timeout: 30m
+          script: |
+            set -euo pipefail
+            APP_DIR="/var/www/traqueurdefuite"
+            echo "=== Dossier app : $APP_DIR ==="
+            echo "=== Commit GitHub : ${{ github.sha }} ==="
+            if [ ! -d "$APP_DIR/.git" ]; then
+              sudo mkdir -p "$APP_DIR"
+              sudo chown "$(whoami):$(whoami)" "$APP_DIR"
+              git clone https://github.com/${{ github.repository }}.git "$APP_DIR"
+            fi
+            cd "$APP_DIR"
+            git fetch origin main
+            git checkout main
+            git reset --hard "${{ github.sha }}"
+            bash scripts/vps-deploy.sh
