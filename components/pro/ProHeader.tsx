@@ -12,6 +12,8 @@ export default function ProHeader() {
   const [servicesOpen, setServicesOpen] = useState(false);
 
   useEffect(() => {
+    // Ferme le menu quand la page change.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reset lié à la route
     setOpen(false);
     setServicesOpen(false);
   }, [pathname]);

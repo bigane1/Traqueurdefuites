@@ -25,6 +25,8 @@ export default function AdminPanel() {
   };
 
   useEffect(() => {
+    // Chargement initial : la session admin vient du serveur.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch au montage
     void load();
   }, []);
 
