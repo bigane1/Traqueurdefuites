@@ -1,24 +1,26 @@
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import FloatingCTA from "@/components/FloatingCTA";
-import HeroModern from "@/components/home/HeroModern";
-import UrgenceModern from "@/components/home/UrgenceModern";
-import ServicesGrid from "@/components/home/ServicesGrid";
+import HeroUltra from "@/components/ultra/HeroUltra";
+import MarqueeUltra from "@/components/ultra/MarqueeUltra";
+import UrgenceUltra from "@/components/ultra/UrgenceUltra";
+import ServicesUltra from "@/components/ultra/ServicesUltra";
 import ClientFocusBlocks from "@/components/ClientFocusBlocks";
-import ProcessModern from "@/components/home/ProcessModern";
-import TarifsTeaser from "@/components/home/TarifsTeaser";
-import ReviewsModern from "@/components/home/ReviewsModern";
-import ZoneModern from "@/components/home/ZoneModern";
-import FaqModern from "@/components/home/FaqModern";
-import ContactModern from "@/components/home/ContactModern";
+import ProcessUltra from "@/components/ultra/ProcessUltra";
+import TarifsUltra from "@/components/ultra/TarifsUltra";
+import ValuesUltra from "@/components/ultra/ValuesUltra";
+import ReviewsUltra from "@/components/ultra/ReviewsUltra";
+import ZoneUltra from "@/components/ultra/ZoneUltra";
+import FaqUltra from "@/components/ultra/FaqUltra";
+import ContactUltra from "@/components/ultra/ContactUltra";
 import { getSiteContent } from "@/lib/site-content";
 import { faqSchema } from "@/lib/schema";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Accueil classique",
-  description: "Version d'accueil style Qadus — Traqueur de Fuites",
+  title: "Autre version",
+  description: "Autre version de l'accueil — Traqueur de Fuites",
 };
 
 export default async function ModerneHomePage() {
@@ -32,16 +34,18 @@ export default async function ModerneHomePage() {
       />
       <SiteHeader />
       <main>
-        <HeroModern content={content} />
-        <UrgenceModern />
-        <ServicesGrid items={content.expertises} />
+        <HeroUltra content={content} />
+        <MarqueeUltra />
+        <UrgenceUltra />
+        <ServicesUltra items={content.expertises} />
         <ClientFocusBlocks blocks={content.clientFocusBlocks} />
-        <ProcessModern />
-        <TarifsTeaser />
-        <ReviewsModern items={content.testimonials} />
-        <ZoneModern groups={content.zoneGroups} />
-        <FaqModern items={content.faq} />
-        <ContactModern />
+        <ProcessUltra />
+        <TarifsUltra />
+        <ValuesUltra />
+        <ReviewsUltra items={content.testimonials} />
+        <ZoneUltra groups={content.zoneGroups} />
+        <FaqUltra items={content.faq} />
+        <ContactUltra />
       </main>
       <SiteFooter />
       <FloatingCTA />

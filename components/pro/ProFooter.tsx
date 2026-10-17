@@ -32,8 +32,8 @@ export default function ProFooter() {
         <div>
           <p className="font-bold text-[var(--pro-ink)] mb-3">Site</p>
           <ul className="space-y-2">
-            <li><Link href="/" className="hover:text-[var(--pro-ink)]">Version classique</Link></li>
-            <li><Link href="/moderne" className="hover:text-[var(--pro-ink)]">Version moderne</Link></li>
+            <li><Link href="/" className="hover:text-[var(--pro-ink)]">Accueil</Link></li>
+            <li><Link href="/moderne" className="hover:text-[var(--pro-ink)]">Autre version</Link></li>
             <li><Link href="/tarifs" className="hover:text-[var(--pro-ink)]">Tarifs</Link></li>
             <li><Link href="/blog" className="hover:text-[var(--pro-ink)]">Blog</Link></li>
             <li><Link href="/mentions-legales" className="hover:text-[var(--pro-ink)]">Mentions légales</Link></li>

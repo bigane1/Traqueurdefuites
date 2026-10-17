@@ -9,7 +9,7 @@ export default function ProHero({ content }: { content: SiteContent }) {
         <nav aria-label="Fil d'Ariane" className="text-xs text-[var(--pro-muted)] mb-8">
           <ol className="flex flex-wrap gap-1">
             <li>
-              <Link href="/moderne" className="hover:text-[var(--pro-accent)]">
+              <Link href="/" className="hover:text-[var(--pro-accent)]">
                 Accueil
               </Link>
             </li>

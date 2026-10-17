@@ -21,7 +21,7 @@ export default function ProHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--pro-line)] bg-white/90 backdrop-blur-md">
       <div className="max-w-6xl mx-auto px-4 h-[4.25rem] flex items-center justify-between gap-4">
-        <Link href="/moderne" className="flex items-center gap-2 shrink-0 group">
+        <Link href="/" className="flex items-center gap-2 shrink-0 group">
           <span className="h-9 w-9 rounded-lg bg-[var(--pro-ink)] text-white flex items-center justify-center text-xs font-black tracking-tighter group-hover:bg-[var(--pro-accent-dark)] transition-colors">
             TF
           </span>
@@ -35,7 +35,7 @@ export default function ProHeader() {
             item.label === "Contact" ? null : (
               <Link
                 key={item.href}
-                href={item.href === "/" ? "/moderne" : item.href}
+                href={item.href}
                 className="px-3 py-2 rounded-lg text-[var(--pro-muted)] hover:text-[var(--pro-ink)] hover:bg-[var(--pro-surface)] transition"
               >
                 {item.label}
@@ -71,7 +71,7 @@ export default function ProHeader() {
             )}
           </div>
           <Link
-            href="/moderne#contact"
+            href="/#contact"
             className="px-3 py-2 rounded-lg text-[var(--pro-muted)] hover:text-[var(--pro-ink)]"
           >
             Contact
@@ -101,7 +101,7 @@ export default function ProHeader() {
 
       {open && (
         <div className="lg:hidden border-t border-[var(--pro-line)] bg-white px-4 py-4 space-y-1">
-          <Link href="/moderne" className="block py-2 font-medium text-[var(--pro-ink)]">
+          <Link href="/" className="block py-2 font-medium text-[var(--pro-ink)]">
             Accueil
           </Link>
           {MAIN_NAV.filter((n) => n.label !== "Accueil" && n.label !== "Contact").map(
@@ -119,7 +119,7 @@ export default function ProHeader() {
               {s.label}
             </Link>
           ))}
-          <Link href="/moderne#contact" className="block py-2 font-medium">
+          <Link href="/#contact" className="block py-2 font-medium">
             Contact
           </Link>
           <a href={telHref} className="block mt-3 text-center bg-[var(--pro-accent)] text-white font-bold py-3 rounded-xl">

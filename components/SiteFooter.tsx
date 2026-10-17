@@ -36,12 +36,12 @@ export default async function SiteFooter() {
           <ul className="space-y-2 text-sm">
             <li>
               <Link href="/" className="hover:text-white">
-                Accueil (version actuelle)
+                Accueil
               </Link>
             </li>
             <li>
               <Link href="/moderne" className="hover:text-white">
-                Accueil style classique
+                Autre version
               </Link>
             </li>
             <li>

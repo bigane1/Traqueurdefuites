@@ -1,18 +1,16 @@
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import FloatingCTA from "@/components/FloatingCTA";
-import HeroUltra from "@/components/ultra/HeroUltra";
-import MarqueeUltra from "@/components/ultra/MarqueeUltra";
-import UrgenceUltra from "@/components/ultra/UrgenceUltra";
-import ServicesUltra from "@/components/ultra/ServicesUltra";
+import HeroModern from "@/components/home/HeroModern";
+import UrgenceModern from "@/components/home/UrgenceModern";
+import ServicesGrid from "@/components/home/ServicesGrid";
 import ClientFocusBlocks from "@/components/ClientFocusBlocks";
-import ProcessUltra from "@/components/ultra/ProcessUltra";
-import TarifsUltra from "@/components/ultra/TarifsUltra";
-import ValuesUltra from "@/components/ultra/ValuesUltra";
-import ReviewsUltra from "@/components/ultra/ReviewsUltra";
-import ZoneUltra from "@/components/ultra/ZoneUltra";
-import FaqUltra from "@/components/ultra/FaqUltra";
-import ContactUltra from "@/components/ultra/ContactUltra";
+import ProcessModern from "@/components/home/ProcessModern";
+import TarifsTeaser from "@/components/home/TarifsTeaser";
+import ReviewsModern from "@/components/home/ReviewsModern";
+import ZoneModern from "@/components/home/ZoneModern";
+import FaqModern from "@/components/home/FaqModern";
+import ContactModern from "@/components/home/ContactModern";
 import { getSiteContent } from "@/lib/site-content";
 import { faqSchema } from "@/lib/schema";
 
@@ -29,18 +27,16 @@ export default async function HomePage() {
       />
       <SiteHeader />
       <main>
-        <HeroUltra content={content} />
-        <MarqueeUltra />
-        <UrgenceUltra />
-        <ServicesUltra items={content.expertises} />
+        <HeroModern content={content} />
+        <UrgenceModern />
+        <ServicesGrid items={content.expertises} />
         <ClientFocusBlocks blocks={content.clientFocusBlocks} />
-        <ProcessUltra />
-        <TarifsUltra />
-        <ValuesUltra />
-        <ReviewsUltra items={content.testimonials} />
-        <ZoneUltra groups={content.zoneGroups} />
-        <FaqUltra items={content.faq} />
-        <ContactUltra />
+        <ProcessModern />
+        <TarifsTeaser />
+        <ReviewsModern items={content.testimonials} />
+        <ZoneModern groups={content.zoneGroups} />
+        <FaqModern items={content.faq} />
+        <ContactModern />
       </main>
       <SiteFooter />
       <FloatingCTA />
